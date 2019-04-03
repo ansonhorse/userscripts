@@ -4,7 +4,7 @@
 // @version      0.1
 // @description  iconfont.cn无刷新修改Font Class
 // @author       Anxon
-// @match        http://www.iconfont.cn/manage/index*
+// @match        https://www.iconfont.cn/manage/index*
 // @require      https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js
 // @grant        none
 // ==/UserScript==
@@ -18,7 +18,7 @@
      * @returns {String}
      */
     function getCsrfToken() {
-        return $('meta[name="csrf-ctoken"]').attr('content')
+        return $('meta[name="csrf-token"]').attr('content')
     }
 
     function getProjectId() {
@@ -55,7 +55,7 @@
                 id: itemId,
             }
             $.ajax({
-                url: 'http://www.iconfont.cn/api/icon/updateProjectIcon.json',
+                url: 'https://www.iconfont.cn/api/icon/updateProjectIcon.json',
                 type: 'POST',
                 data: data,
                 dataType: 'json',
