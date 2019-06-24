@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         iconfont.cn无刷新修改Font Class 2b
 // @namespace    https://ansonhorse.github.io/
-// @version      0.2
+// @version      0.3
 // @description  iconfont.cn无刷新修改Font Class
 // @author       Anxon
 // @match        https://www.iconfont.cn/manage/index*
