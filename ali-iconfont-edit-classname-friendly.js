@@ -1,16 +1,19 @@
 // ==UserScript==
-// @name         iconfont.cn无刷新修改Font Class
+// @name         iconfont.cn无刷新修改Font Class 2b
 // @namespace    https://ansonhorse.github.io/
-// @version      0.1
+// @version      0.2
 // @description  iconfont.cn无刷新修改Font Class
 // @author       Anxon
 // @match        https://www.iconfont.cn/manage/index*
-// @require      https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js
+// @require      https://cdn.bootcss.com/jquery/3.4.0/jquery.min.js
 // @grant        none
 // ==/UserScript==
 
 (function() {
     'use strict'
+
+    var token;
+    var projectId;
 
     /**
      * 获取csrf-ctoken
@@ -47,13 +50,15 @@
     }
 
     function update(itemId, newClass) {
+        console.log('iconfont: update', itemId, newClass);
         return new Promise((resolve, reject) => {
-            let data = {
+            const data = {
                 font_class: newClass,
                 ctoken: token,
                 pid: projectId,
                 id: itemId,
-            }
+            };
+            console.log(data);
             $.ajax({
                 url: 'https://www.iconfont.cn/api/icon/updateProjectIcon.json',
                 type: 'POST',
@@ -83,32 +88,39 @@
         })
     }
 
-    let token = getCsrfToken()
-    let projectId = getProjectId()
-
-
     $(function () {
+        $('body').on('click', '.genteelly-edit', function () {
+            let jqBtn = $(this),
+                itemId = jqBtn.data('id'),
+                jqCls = jqBtn.closest('.icon-item').find('.icon-code.icon-code-show'),
+                fullCls = jqCls.text(),
+                cls = jqCls.attr('title'),
+                prefix = fullCls.replace(new RegExp(`-${cls}$`), '')
+            let newCls = prompt('New Class:', cls)
+            if (newCls) {
+                console.log('new class', newCls)
+                update(itemId, newCls)
+                    .then(res => {
+                    jqCls.attr('title', newCls).text(prefix + '-' + newCls)
+                })
+                  .catch(err => {
+                    console.warn(err);
+                })
+            } else {
+                console.warn('no new class')
+            }
+        })
+
         injectStyle()
 
-        if (token && projectId) {
-            $('body').on('click', '.genteelly-edit', function () {
-                let jqBtn = $(this),
-                    itemId = jqBtn.data('id'),
-                    jqCls = jqBtn.closest('.icon-item').find('.icon-code.icon-code-show'),
-                    fullCls = jqCls.text(),
-                    cls = jqCls.attr('title'),
-                    prefix = fullCls.replace(new RegExp(`-${cls}$`), '')
-                let newCls = prompt('New Class:', cls)
-                if (newCls) {
-                    update(itemId, newCls)
-                        .then(res => {
-                            jqCls.attr('title', newCls).text(prefix + '-' + newCls)
-                        })
-                        .catch(err => {})
-                }
-            })
-            setInterval(mission, 2000)
-        }
+        setInterval(() => {
+            token = getCsrfToken()
+            projectId = getProjectId()
+
+            if (token && projectId) {
+                mission()
+            }
+        }, 1800)
     })
 
 })()
