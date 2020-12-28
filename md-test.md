@@ -7,6 +7,7 @@
 ##### [Keys](https://github.com/go-vgo/robotgo/blob/master/docs/keys.md)
 ##### [SetKeyboardDelay](#SetKeyDelay) (Equivalent to SetKeyDelay, Wno-deprecated)
 ##### [SetKeyDelay](#SetKeyDelay)
+[》》》SetKeyDelay](#SetKeyDelay)
 ##### [KeyTap](#KeyTap)
 ##### [KeyToggle](#KeyToggle)
 ##### [TypeString](#TypeString)
